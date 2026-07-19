@@ -1,1 +1,77 @@
+<?php
+$host = "localhost";
+$user = "root";
+$pass = "";
+$db   = "hospital_db";
 
+$conn = new mysqli($host, $user, $pass, $db);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+/* =========================
+   1. PATIENT TABLE INSERT
+========================= */
+$full_name = $_POST['full_name'];
+$age = $_POST['age'];
+$gender = $_POST['gender'];
+$contact = $_POST['contact'];
+$email = $_POST['email'];
+$blood_group = $_POST['blood_group'];
+$address = $_POST['address'];
+$emergency_contact = $_POST['emergency_contact'];
+
+$sql1 = "INSERT INTO patients 
+(full_name, age, gender, contact, email, blood_group, address, emergency_contact)
+VALUES 
+('$full_name', '$age', '$gender', '$contact', '$email', '$blood_group', '$address', '$emergency_contact')";
+
+if ($conn->query($sql1) === TRUE) {
+
+    $patient_id = $conn->insert_id;
+
+    /* =========================
+       2. MEDICAL INFO INSERT
+    ========================= */
+    $height = $_POST['height'];
+    $weight = $_POST['weight'];
+    $bmi = $_POST['bmi'];
+    $allergies = $_POST['allergies'];
+    $previous_history = $_POST['previous_history'];
+    $current_medications = $_POST['current_medications'];
+
+    $sql2 = "INSERT INTO medical_info 
+    (patient_id, height, weight, bmi, allergies, previous_history, current_medications)
+    VALUES 
+    ('$patient_id', '$height', '$weight', '$bmi', '$allergies', '$previous_history', '$current_medications')";
+
+    $conn->query($sql2);
+
+    /* =========================
+       3. DIAGNOSIS INSERT
+    ========================= */
+    $visit_date = $_POST['visit_date'];
+    $severity = $_POST['severity'];
+    $disease = $_POST['disease'];
+    $symptoms = $_POST['symptoms'];
+    $temperature = $_POST['temperature'];
+    $blood_pressure = $_POST['blood_pressure'];
+    $pulse_rate = $_POST['pulse_rate'];
+    $spo2 = $_POST['spo2'];
+
+    $sql3 = "INSERT INTO diagnosis 
+    (patient_id, visit_date, severity, disease, symptoms, temperature, blood_pressure, pulse_rate, spo2)
+    VALUES 
+    ('$patient_id', '$visit_date', '$severity', '$disease', '$symptoms', '$temperature', '$blood_pressure', '$pulse_rate', '$spo2')";
+
+    $conn->query($sql3);
+
+    echo "✅ Patient Record Saved Successfully!";
+    
+} else {
+    echo "❌ Error: " . $conn->error;
+}
+
+$conn->close();
+?>
