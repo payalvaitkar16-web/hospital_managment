@@ -1,1 +1,16 @@
+<?php
 
+$servername = "localhost";
+$username   = "root";
+$password   = "Payal@123";   // Agar root password change kiya hai to wahi likho
+$database   = "hospital_db";
+
+$conn = mysqli_connect($servername, $username, $password, $database);
+
+if (!$conn) {
+    die("Database Connection Failed: " . mysqli_connect_error());
+}
+
+// Connection successful
+
+?>
